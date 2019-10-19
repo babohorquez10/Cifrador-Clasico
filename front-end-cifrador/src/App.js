@@ -12,7 +12,7 @@ class App extends React.Component {
     this.state = {
       textoIngresado: "",
       textoCifrado: "",
-      palabraClave: ""
+      palabraClave: "Ejemplo"
     };
 
     this.handlePalabraClaveChange = this.handlePalabraClaveChange.bind(this);
@@ -21,18 +21,49 @@ class App extends React.Component {
 
   async handlePalabraClaveChange (nuevaPalabra) {
     await this.setState({palabraClave: nuevaPalabra});
-    this.cifrarTexto();
+    this.generarAlfabetoCifrado();
   }
 
   async handleTextoChange (nuevoTexto) {
     await this.setState({textoIngresado: nuevoTexto});
-    this.cifrarTexto();
+    //this.cifrarTexto();
   }
 
-  cifrarTexto() {
-    console.log("Cifrando...");
+  generarAlfabetoCifrado() {
     
-    this.setState({textoCifrado: this.state.textoIngresado});
+    const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
+    "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
+    let textoCifrado = "";
+    const palabraClave = this.state.palabraClave.toLowerCase();
+    const textoOriginal = this.state.textoIngresado;
+
+    let palabraClaveRef = "";
+    let alfabetoCifrado = [];
+    let index = 0;
+
+    for (let i = 0; i < palabraClave.length; i++) {
+      let repetida = false;
+
+      for (let j = 0; j < palabraClaveRef.length; j++) {
+        if(palabraClave[i] === palabraClaveRef[j]) repetida = true;
+      }
+
+      if(!repetida) {
+        palabraClaveRef += palabraClave[i];
+        index = alfabeto.indexOf(palabraClave[i]);
+        alfabetoCifrado.push(alfabeto.splice(index, 1)[0]);
+      }
+    }
+
+    while (alfabeto.length > 0) {
+      if(index > alfabeto.length - 1) index = 0;
+      alfabetoCifrado.push(alfabeto.splice(index, 1)[0]);
+    }
+
+    console.log(alfabetoCifrado);
+
+    return alfabetoCifrado;
   }
 
   render () {
